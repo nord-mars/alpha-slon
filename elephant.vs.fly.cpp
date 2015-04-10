@@ -31,7 +31,7 @@ int main()
     if( false == file_read(fileIns, &sta) ) return -1;
     if( false == file_read(fileDic, &dic) ) return -1;
 
-    // устраняем ошибку в постаноке задачи предпологающую
+    // устраняем ошибку в постановке задачи предполагающую
     // что слова в начальном диапазоне отсортированы правильно
     sta.sort();
     // pointer to the start and end word 
@@ -39,7 +39,7 @@ int main()
     list<wstring>::const_iterator it_last  = sta.end();
 
     // print file info
-//    wcout << "diapazon etalon:\n"; contaner_print(&sta);
+//    wcout << "diapason etalon:\n"; contaner_print(&sta);
 //    wcout << "dictionary:\n";      contaner_print(&dic);
 
     // remove long/short word
@@ -58,7 +58,7 @@ int main()
     dic.sort();
     dic.unique();
 
-//    wcout << "after sort and uniq:\n";
+//    wcout << "after sort and unique:\n";
 //    contaner_print(&dic);
 
     // The elephant
@@ -66,7 +66,7 @@ int main()
     if ( false == r_find(&dic, *sta.begin(), *sta.rbegin(), 1, dic.size()) )
         wcout << *sta.rbegin() << " - the chain is bed!\n";
     else
-        wcout << *sta.rbegin() << " - the chain is ok!\n";
+        wcout << *sta.rbegin() << " - the chain is good!\n";
 
     return 0;
 }
