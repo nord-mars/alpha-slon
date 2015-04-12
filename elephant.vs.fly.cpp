@@ -7,7 +7,7 @@
 using namespace std;
 
 bool file_read(const char *filename, list<wstring> *l);
-template<typename T> void contaner_print(T *s);
+template<typename T> void contaner_print(T &container);
 bool r_find(list<wstring> *lst, wstring start, wstring finish, int dif, int size);
 
 int main()
@@ -20,48 +20,49 @@ int main()
     std::wclog.imbue(std::locale());
     std::ios::sync_with_stdio(false);
 
-    // read from file to set<wstring> (set kill retrain)
+    // note: read from file
     const char* fileIns = "start.dat";
     const char* fileDic = "dictionary.dat";
 
     list<wstring> sta;
     list<wstring> dic;
 
-//    wcout << "read date from file\n";
     if( false == file_read(fileIns, &sta) ) return -1;
     if( false == file_read(fileDic, &dic) ) return -1;
 
     // устраняем ошибку в постановке задачи предполагающую
     // что слова в начальном диапазоне отсортированы правильно
     sta.sort();
-    // pointer to the start and end word 
-    list<wstring>::const_iterator it_first = sta.begin();
-    list<wstring>::const_iterator it_last  = sta.end();
 
-    // print file info
-//    wcout << "diapason etalon:\n"; contaner_print(&sta);
-//    wcout << "dictionary:\n";      contaner_print(&dic);
+    // note: pointer to the start and end word 
+//    list<wstring>::const_iterator it_first = sta.begin(); // c++11
+    auto it_first = begin(sta);                             // or
 
-    // remove long/short word
+    // note: print data from file
+//    wcout << "diapason etalon:\n"; contaner_print(sta);
+//    wcout << "dictionary:\n";      contaner_print(dic);
+
+    // note: remove long/short word
     uint w_size=it_first->length();
-    auto condition=[&w_size](wstring s){ return s.size() == w_size ? false : true; };  
+//  auto condition=[&size = w_size](wstring s){ return s.size() ==   size ? false : true; }; // c++14
+    auto condition=[       &w_size](wstring s){ return s.size() == w_size ? false : true; }; // c++11
+
     auto it_remove = remove_if( dic.begin(), dic.end(),
-                           condition 
+                           condition
                          );
     dic.erase(it_remove, dic.end());
 
 //    wcout << "after erase long/short word != " << w_size << ":\n";
-//    contaner_print(&dic);
+//    contaner_print(dic);
 
-
-    // remove repeats
+    // note: remove repeats
     dic.sort();
     dic.unique();
 
 //    wcout << "after sort and unique:\n";
-//    contaner_print(&dic);
+//    contaner_print(dic);
 
-    // The elephant
+    // note: finding the elephant
     wcout << *sta.begin() << " - start!\n";
     if ( false == r_find(&dic, *sta.begin(), *sta.rbegin(), 1, dic.size()) )
         wcout << *sta.rbegin() << " - the chain is bed!\n";
@@ -88,11 +89,11 @@ bool file_read(const char *filename, list<wstring> *l)
      return true;
 }
 template<typename T>
-void contaner_print(T *s)
+void contaner_print(T &container)
 {
-    for(auto w: *s)
+    for(auto s: container) // c++11 - Range-Based for
     {
-        wcout << "  " << w << endl;
+        wcout << "  " << s << endl;
     }
 }
 bool r_find(list<wstring> *lst, wstring start, wstring finish, int dif, int size)
@@ -110,8 +111,7 @@ bool r_find(list<wstring> *lst, wstring start, wstring finish, int dif, int size
     }
 
     uint c, f;
-    auto it=lst->begin();
-    for(; it != lst->end(); it++)
+    for(auto it=lst->begin(); it != lst->end(); it++)
     {
         c=0;
         f=0;
